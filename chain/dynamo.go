@@ -11,6 +11,12 @@ type DynamoDB struct {
 	table dynamo.Table
 }
 
+type item struct {
+	PKey  string `dynamo:"pk"`
+	SKey  string `dynamo:"sk"`
+	Value string `dynamo:"value"`
+}
+
 func NewDynamoDB(region, table string) *DynamoDB {
 	ssn, err := session.NewSession(&aws.Config{Region: aws.String(region)})
 	if err != nil {
@@ -20,7 +26,7 @@ func NewDynamoDB(region, table string) *DynamoDB {
 	return &DynamoDB{table: dynamo.New(ssn).Table(table)}
 }
 
-func (x *DynamoDB) SaveItem(key, value string) error {
+func (x *DynamoDB) AppendItem(key, value string) error {
 	i := item{
 		PKey:  key,
 		SKey:  uuid.New().String(),
@@ -32,7 +38,7 @@ func (x *DynamoDB) SaveItem(key, value string) error {
 	return nil
 }
 
-func (x *DynamoDB) GetItems(key string) ([]string, error) {
+func (x *DynamoDB) FetchItems(key string) ([]string, error) {
 	var items []item
 	if err := x.table.Get("pk", items).All(&items); err != nil {
 		return nil, err

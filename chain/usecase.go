@@ -15,12 +15,12 @@ const (
 )
 
 func (x *Usecase) SaveUser(user string) error {
-	if err := x.repo.SaveItem(userKey, user); err != nil {
+	if err := x.repo.AppendItem(userKey, user); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (x *Usecase) GetUsers() ([]string, error) {
-	return x.repo.GetItems(userKey)
+	return x.repo.FetchItems(userKey)
 }

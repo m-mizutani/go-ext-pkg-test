@@ -12,7 +12,7 @@ func NewInMemoryDB() *InMemoryDB {
 	}
 }
 
-func (x *InMemoryDB) SaveItem(key, value string) error {
+func (x *InMemoryDB) AppendItem(key, value string) error {
 	m, ok := x.data[key]
 	if !ok {
 		m = make(map[string]string)
@@ -23,7 +23,7 @@ func (x *InMemoryDB) SaveItem(key, value string) error {
 	return nil
 }
 
-func (x *InMemoryDB) GetItems(key string) ([]string, error) {
+func (x *InMemoryDB) FetchItems(key string) ([]string, error) {
 	m, ok := x.data[key]
 	if !ok {
 		return nil, nil
